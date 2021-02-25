@@ -148,16 +148,15 @@ function control_pressed(control) {
     break
 		case "=": 
     var total = screen.get.operand();
-    
-    var express = calculation.expression();
+     
     var oper = ['+','-','/','*']
-    
-    if (oper.includes(calculation.last())){
-      console.log("already pressed an operator Need a Number")
-      alert("already pressed an operator Need a Number")
+    if ((oper.includes(calculation.last())) && (total == '')){
+      console.log("already pressed an operator")
+      alert("already pressed an operator Enter A Number")
       return
     }
     calculation.push(total)
+    var express = calculation.expression();
     screen.set.expression(express)
     var val = evaluate(express)
     console.log("=");
@@ -295,46 +294,7 @@ function evaluate(expression) {
   return answer;
 
 }
-function maxLength(number,maxDigit=max_digits){
-  number = number.toString();
-  number = number.split('.');
-  
-  if (number[0].length > max_digits){
-    var num = parseInt(number[0][8])
-    var add = 0;
-    if (num >='5'){
-      add = 1
-    }
-    var rounded = eval(number[0].slice(0,8) + '+' + add.toString())
-    var power = number[0].length - 1
-    rounded = rounded.toString()
-    var numberE = rounded[0] + "." + rounded.slice(1,8) + "E+" + power
-    return numberE
-  }
-  if ((number[1].length > max_digits) && (number[0]=='0' || number[0]=='')){
-    
-    var num = parseInt(number[1][8])
-    var add = 0;
-    if (num >='5'){
-      add = 1
-    }
-    var rounded = eval(number[1].slice(0,8) + '+' + add.toString())
-    var power = number[1].length - 1
-    rounded = rounded.toString()
-    var numberE = rounded[0] + "." + rounded.slice(1,8) + "E-" + power
-    return numberE
-  }
-  else if (number[0].length + number[1].length > 8) {
-    return (number.join('.')).slice(0,9)
-  }
-}
-function consecutive(arr){
-  for(let i = 0; i < arr.length - 1; i++){
-    if (arr[i] == arr[i+1] - 1){
-      return i;
-    }
-  }
-}
+
 
 
 //search for all HTML objects that are using the class name 'button'

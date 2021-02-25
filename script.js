@@ -163,13 +163,18 @@ function control_pressed(control) {
 function digit_pressed(digit) {
 	console.log("digit pressed: " + digit);
   var total = screen.get.operand();
-  if (total.length == max_digits){
+  var numt = total.replace('.','');
+  
+  if (numt.length == max_digits){
     return
   }
   total = total + digit
-  //total = leading_zero(total)
+  if ((valid_decimals(total)==false) && (digit == '.')){
+    return
 
-  
+  }
+
+  total = leading_zero(total)
   screen.set.operand(total);
   
 
@@ -185,10 +190,15 @@ function operator_pressed(operator) {
     console.log("already pressed an operator")
     calculation.pop()
   }
-  
+  if (total!=''){
+    calculation.push(total)
+  }
+  if ((calculation.last()=='') && (operator !='-')){
+    console.log('No Number Yet Pressed')
+    return
+  }
   total = leading_zero(total)
-  calculation.push(total)
-  calculation.push(operator);
+  calculation.push(operator)
   var express = calculation.expression()
   screen.set.expression(express)
   screen.clear.operand()
@@ -271,52 +281,9 @@ function evaluate(expression) {
 
     return answer
   }
-  
-  var operIndex = getAllIndexes(arr,expression);
-  var indexOp = getSecond(operIndex);
-  //console.log(arr)
-  //console.log(indexOp)
+
   
   return answer;
-
-  /*
-  
-  TRIED TO DO IT MYSELF
-  arr = expression.match(/[+*-\/]/g);
-  console.log(arr);
-  //getAllIndexes(arr,expression);
-  var operIndex = getAllIndexes(arr,expression);
-  var locationsOfadd = getIndex(operIndex,'+');
-  var indexOp = getSecond(operIndex);
-  //console.log(indexOp);
-  //console.log(locationsOfadd);
-  //console.log(operIndex);
-
-  
-  var locationsOfdiv = getIndex(operIndex,'/');
-  
-  var locationsOfmult = getIndex(operIndex,'*');
-  var locationsOfminus = getIndex(operIndex,'-');
-  var locationsOfadd = getIndex(operIndex,'+');
-  
-  if (locationsOfdiv.length > 0){
-    console.log(locationsOfdiv);
-    var index = locationsOfdiv[0];
-    console.log(index)
-    var indexofOperator = indexOp.indexOf(index);
-    
-    
-    var operatorBeforeIndex = indexOp[indexofOperator -1];
-    console.log(operatorBeforeIndex);
-    var operatorAfterIndex = indexOp[indexofOperator +1];
-    var charBetween = charRange(operatorBeforeIndex + 1,operatorAfterIndex,expression);
-    console.log(operatorAfterIndex);
-    var divise = charBetween.split('/');
-    result = parseInt(divise[0])/parseInt(divise[1])
-    console.log(result + "woow")
-
-  }
-  */
 
 }
 function maxLength(number,maxDigit=max_digits){
@@ -360,51 +327,7 @@ function consecutive(arr){
   }
 }
 
-function getAllIndexes(arr, str) {
-  
-  var newarr = [];
-  var strl = str.length - 1;
-  var j = 0;
-  //return newarr
-  for(let i = 0; i < arr.length; i++){
-    
-    var index = str.indexOf(arr[i],j)
-    newarr.push([arr[i],index]);  
-    j = parseInt(index) + 1;
-    
 
-  }
-  return newarr;
-
-  
-    
-
-}
-function getIndex(arr,oper){
-  var newarr = [];
-    for(let i = 0; i < arr.length; i++){
-    
-      if (arr[i][0] == oper){
-        newarr.push(arr[i][1]);
-      }
-  }
-  return newarr
-}
-function getSecond(arr){
-  var newarr = [];
-  for(let i = 0; i < arr.length; i++){
-    newarr.push(arr[i][1])
-  }
-  return newarr
-
-}
-function charRange(x,y,str){
-  var newstr = "";
-  for(let i = x; i < y; i++) {
-    newstr += str[i];
-  }
- return newstr
-}
 //search for all HTML objects that are using the class name 'button'
 var buttons = document.getElementsByClassName('button');
 for(let i = 0; i < buttons.length; i++) { //loop through each 'button' instance

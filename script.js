@@ -146,7 +146,8 @@ function control_pressed(control) {
     calculation.clear();
     console.log("ac");
     break
-		case "=": 
+		case "=":
+    console.log("=");
     var total = screen.get.operand();
      
     var oper = ['+','-','/','*']
@@ -159,8 +160,13 @@ function control_pressed(control) {
     var express = calculation.expression();
     screen.set.expression(express)
     var val = evaluate(express)
-    console.log("=");
+    var numt = (val.toString()).replace('.','');
+    if (numt.length > max_digits){
+      val = parseFloat(val)
+      val = val.toExponential(8);
 
+    }
+    
     screen.set.operand(val)
     calculation.clear()
     break
@@ -316,4 +322,3 @@ window.onload = () => {
   
   
 };
-

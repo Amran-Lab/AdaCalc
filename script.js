@@ -148,11 +148,20 @@ function control_pressed(control) {
     break
 		case "=": 
     var total = screen.get.operand();
-    calculation.push(total)
+    
     var express = calculation.expression();
+    var oper = ['+','-','/','*']
+    
+    if (oper.includes(calculation.last())){
+      console.log("already pressed an operator Need a Number")
+      alert("already pressed an operator Need a Number")
+      return
+    }
+    calculation.push(total)
     screen.set.expression(express)
     var val = evaluate(express)
     console.log("=");
+
     screen.set.operand(val)
     calculation.clear()
     break

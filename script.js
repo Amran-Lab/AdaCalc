@@ -149,6 +149,10 @@ function control_pressed(control) {
     break
 		case "=":
     console.log("=");
+    if (calculation.expression==''){
+      screen.set.operand('')
+      return
+    }
     var total = screen.get.operand();
      
     var oper = ['+','-','/','*']
@@ -172,7 +176,7 @@ function control_pressed(control) {
       calculation.push(val)
       
     }
-
+  
     screen.set.operand(valPrecision)
     
     

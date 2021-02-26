@@ -166,6 +166,11 @@ function control_pressed(control) {
       alert("already pressed an operator Enter A Number")
       return
     }
+    if (total == '.'){
+      console.log("Pressed a Decimal")
+      alert("Pressed A Decimal Enter A Number")
+      return
+    }
     calculation.push(total)
     var express = calculation.expression();
 
@@ -176,6 +181,7 @@ function control_pressed(control) {
     if (val =="ERROR"){
       calculation.clear()
       screen.set.operand(val)
+      AnsFlag = true
       return
     }
     val = parseFloat(val)
@@ -273,7 +279,7 @@ function evaluate(expression) {
     return ""
   }
 
-  /*
+  /* Was Checking for Invalid Characters try statement does that now though
   if (expression.replace((/[e+*\/]/g),"") != trim_invalid_numerics(expression)){
 
     return "ERROR"

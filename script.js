@@ -4,6 +4,7 @@
 const max_digits = 8;
 const _device_expression = document.getElementById("expression");
 const _device_operand = document.getElementById("operand");
+var AnsFlag = false
 
 
 const screen = {
@@ -160,15 +161,23 @@ function control_pressed(control) {
     var express = calculation.expression();
     screen.set.expression(express)
     var val = evaluate(express)
-    var numt = (val.toString()).replace('.','');
-    if (numt.length > max_digits){
-      val = parseFloat(val)
-      val = val.toExponential(8);
+    val = parseFloat(val)
+    var valPrecision =  trailing_zero(val.toPrecision(8));
 
-    }
-    
-    screen.set.operand(val)
     calculation.clear()
+    if (val.toString() != valPrecision.toString()) {
+      AnsFlag = true
+      console.log('set as true')
+
+      calculation.push(val)
+      
+    }
+
+    screen.set.operand(valPrecision)
+    
+    
+
+
     break
 	}
 }
@@ -176,6 +185,12 @@ function control_pressed(control) {
 
 function digit_pressed(digit) {
 	console.log("digit pressed: " + digit);
+  if (AnsFlag == true){
+    screen.clear.operand()
+    calculation.clear()
+    AnsFlag = false
+
+  }
   var total = screen.get.operand();
   var numt = total.replace('.','');
   
@@ -198,8 +213,14 @@ function digit_pressed(digit) {
 function operator_pressed(operator) {
 	console.log("operator pressed: " + operator);
   //checks if last expression was an operator
-  var oper = ['+','-','/','*']
   var total = screen.get.operand();
+  console.log(AnsFlag + "FLAG")
+  if (AnsFlag == true){
+    AnsFlag = false
+    total = ''
+  }
+  var oper = ['+','-','/','*']
+  
   if (oper.includes(calculation.last()) && total ==''){
     console.log("already pressed an operator")
     calculation.pop()
@@ -227,9 +248,14 @@ function trailing_zero(exp){
     str = str.slice(0,str.length - 1)
     
   }
+  if (str[str.length -1]=='.'){
+    str = str.slice(0,str.length - 1)
+
+  }
   return str
   
 }
+
 function leading_zero(expression){
   
   while ((expression[0] == '0') && (expression[1] != '.') && (expression.length > 1)){
@@ -322,3 +348,6 @@ window.onload = () => {
   
   
 };
+
+
+

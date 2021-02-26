@@ -149,7 +149,7 @@ function control_pressed(control) {
     break
 		case "=":
     console.log("=");
-    if (calculation.expression==''){
+    if (calculation.expression()==''){
       screen.set.operand('')
       return
     }

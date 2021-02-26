@@ -41,7 +41,7 @@ const calculation = {
     
   },
 	last: function () {
-    //console.log(calculation.last()); - output “”
+ 
 
     if (calculation._expression.length == 0){   //checks if anything is in array
       var quote = '';
@@ -224,7 +224,7 @@ function operator_pressed(operator) {
 	console.log("operator pressed: " + operator);
   //checks if last expression was an operator
   var total = screen.get.operand();
-  console.log(AnsFlag + "FLAG")
+  
   if (AnsFlag == true){
     AnsFlag = false
     total = ''
@@ -274,8 +274,8 @@ function evaluate(expression) {
   }
 
   
-  if (expression.replace((/[+*\/]/g),"") != trim_invalid_numerics(expression)){
-    
+  if (expression.replace((/[e+*\/]/g),"") != trim_invalid_numerics(expression)){
+
     return "ERROR"
   }
 
@@ -285,15 +285,13 @@ function evaluate(expression) {
   // until it sees a number 00101.002100 return 101.002100 hopefully
   expression= expression.replace(/(?<![\.0-9])0+(?=[0-9])/g,'')
 
-  console.log('expression')
-  console.log(expression);
+
+
   var arr = []
   try {
     var answer = eval(expression).toFixed(11);
     answer = trailing_zero(answer);
     
-    console.log('answer');
-    console.log(answer);
     answer = parseFloat(answer);  
     return answer;
   }

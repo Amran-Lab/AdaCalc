@@ -294,7 +294,7 @@ function evaluate(expression) {
     console.log(expression.replace((/[+*\/]/g),"") + " -- " + trim_invalid_numerics(expression))
     return "ERROR"
   }
-  
+  /*
   expression = expression.split('/')  
   expression = leading_zero_array(expression); 
   expression = expression.join('/')
@@ -307,6 +307,9 @@ function evaluate(expression) {
   expression = expression.split('+')
   expression = leading_zero_array(expression); 
   expression = expression.join('+')
+  */
+  expression= expression.replace(/0+(?=0)/g,'')
+  expression= expression.replace(/0+(?=[1-9])/g,'')
   
   
   console.log('expression')

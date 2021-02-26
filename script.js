@@ -176,7 +176,7 @@ function control_pressed(control) {
       return
     }
     val = parseFloat(val)
-    var valPrecision =  trailing_zero(val.toPrecision(8));  //gets first 8 digits and removes end 0's
+    var valPrecision =  trailing_zero(val.toPrecision(8));  //gets first 8 digits and removes end 0's at start
 
     calculation.clear()
     // Lets Digit Pressed And Operator Pressed Know We Have Recentlt finished an equation
@@ -208,7 +208,12 @@ function digit_pressed(digit) {
     return
 
   }
-  total = leading_zero(total)
+  //checks for 0 at the beginning dpress 0 , 1 gives 1 dpress 0, ., 1, gives 0.1
+  if ((valid_leadingzeros('0' + total)==false) && (total[1] != '.') && total.length > 1){
+    screen.set.operand(total.slice(1,total.length))
+    return
+
+  }
   screen.set.operand(total);
 }
 
@@ -234,13 +239,13 @@ function operator_pressed(operator) {
     console.log('No Number Yet Pressed')
     return
   }
-  total = leading_zero(total)
+  
   calculation.push(operator)
   var express = calculation.expression()
   screen.set.expression(express)
   screen.clear.operand()
 }
-
+//gets rid of 0s at end
 function trailing_zero(exp){
   var str = exp.toString()
   
@@ -256,27 +261,18 @@ function trailing_zero(exp){
   
 }
 
-function leading_zero(expression){
-  
-  while ((expression[0] == '0') && (expression[1] != '.') && (expression.length > 1)){
-    expression= expression.slice(1,expression.length);
-    
-  }
-  return expression;
-  
-}
 
 function evaluate(expression) {
   console.log('computing')
   var expression = expression.replace(/\s/g, '');
-  //get rid of zero at every stage
+  
   if (expression == ''){
     return ""
   }
 
   
   if (expression.replace((/[+*\/]/g),"") != trim_invalid_numerics(expression)){
-    console.log(expression.replace((/[+*\/]/g),"") + " -- " + trim_invalid_numerics(expression))
+    
     return "ERROR"
   }
 

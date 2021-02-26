@@ -308,8 +308,9 @@ function evaluate(expression) {
   expression = leading_zero_array(expression); 
   expression = expression.join('+')
   */
-  expression= expression.replace(/0+(?=0)/g,'')
-  expression= expression.replace(/0+(?=[1-9])/g,'')
+  // gets rid of leading zero
+  expression= expression.replace(/(?<![\.0-9])0+(?=[0-9])/g,'')
+
   
   
   console.log('expression')

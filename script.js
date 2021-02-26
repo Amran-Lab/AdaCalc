@@ -106,7 +106,7 @@ function valid_leadingzeros(value) {
   }
 }
 
-// uncertainty is '.' true or false is '.1' true or false
+
 function valid_decimals(value) {
   var count = value.split('.').length - 1;  //splits the string into an array by .
   if (count > 1) {                  //number of . = number of elements in array -1
@@ -150,7 +150,7 @@ function control_pressed(control) {
 		case "=":
     console.log("=");
     var total = screen.get.operand();
-    
+    //checks for invalid characters
     if ((calculation.expression()=='') || (trim_invalid_numerics(total) != total)){
       screen.set.operand(total)
       return
@@ -165,24 +165,25 @@ function control_pressed(control) {
     }
     calculation.push(total)
     var express = calculation.expression();
+
+    
     screen.set.expression(express)
     var val = evaluate(express)
+    // checks for ERROR
+    if (val =="ERROR"){
+      calculation.clear()
+      screen.set.operand(val)
+      return
+    }
     val = parseFloat(val)
-    var valPrecision =  trailing_zero(val.toPrecision(8));
+    var valPrecision =  trailing_zero(val.toPrecision(8));  //gets first 8 digits and removes end 0's
 
     calculation.clear()
-    if (val.toString() != valPrecision.toString()) {
-      AnsFlag = true
-      console.log('set as true')
-
-      calculation.push(val)
-      
-    }
-  
+    // Lets Digit Pressed And Operator Pressed Know We Have Recentlt finished an equation
+    // And there is an answer 
+    AnsFlag = true
+    calculation.push(val)  
     screen.set.operand(valPrecision)
-    
-    
-
 
     break
 	}
@@ -195,7 +196,6 @@ function digit_pressed(digit) {
     screen.clear.all()
     calculation.clear()
     AnsFlag = false
-
   }
   var total = screen.get.operand();
   var numt = total.replace('.','');
@@ -208,13 +208,9 @@ function digit_pressed(digit) {
     return
 
   }
-
   total = leading_zero(total)
   screen.set.operand(total);
-  
-
 }
-
 
 function operator_pressed(operator) {
 	console.log("operator pressed: " + operator);
@@ -243,12 +239,10 @@ function operator_pressed(operator) {
   var express = calculation.expression()
   screen.set.expression(express)
   screen.clear.operand()
-
-
 }
+
 function trailing_zero(exp){
   var str = exp.toString()
-  //console.log(typeof(str))
   
   while (str[str.length -1] == '0'){
     str = str.slice(0,str.length - 1)
@@ -271,16 +265,7 @@ function leading_zero(expression){
   return expression;
   
 }
-function leading_zero_array(expression){
-  
-  var newarr = []
-  for(let i = 0; i < expression.length; i++) {
-    newarr.push(leading_zero(expression[i]))
 
-  }
-  return newarr
-
-}
 function evaluate(expression) {
   console.log('computing')
   var expression = expression.replace(/\s/g, '');
@@ -294,50 +279,26 @@ function evaluate(expression) {
     console.log(expression.replace((/[+*\/]/g),"") + " -- " + trim_invalid_numerics(expression))
     return "ERROR"
   }
-  /*
-  expression = expression.split('/')  
-  expression = leading_zero_array(expression); 
-  expression = expression.join('/')
-  expression = expression.split('*')
-  expression = leading_zero_array(expression); 
-  expression = expression.join('*') 
-  expression = expression.split('-')
-  expression = leading_zero_array(expression); 
-  expression = expression.join('-')
-  expression = expression.split('+')
-  expression = leading_zero_array(expression); 
-  expression = expression.join('+')
-  */
+
   // gets rid of leading zero
+  // looks behind for a number or decimal and looks ahead for a number
+  // if there are numbers behind it or a decimal it matches
+  // until it sees a number 00101.002100 return 101.002100 hopefully
   expression= expression.replace(/(?<![\.0-9])0+(?=[0-9])/g,'')
 
-  
-  
   console.log('expression')
   console.log(expression);
   var arr = []
-  // cant eval 005*02 need to get rid of zero
+  
   var answer = eval(expression).toFixed(11);
   answer = trailing_zero(answer);
-  //screen.set.operand(answer)
+  
   console.log('answer');
   console.log(answer);
-  
-  ;
-  var arr = expression.match(/[+*\/-]/g);
-  answer = parseFloat(answer);
-  if (arr == null){
-    console.log('No Operator');
-
-    return answer
-  }
-
-  
+  answer = parseFloat(answer);  
   return answer;
 
 }
-
-
 
 //search for all HTML objects that are using the class name 'button'
 var buttons = document.getElementsByClassName('button');
@@ -355,6 +316,5 @@ for(let i = 0; i < buttons.length; i++) { //loop through each 'button' instance
 //once the oload event has fired, execute any requested functions
 window.onload = () => {
   screen.clear.all();
-  
-  
+
 };

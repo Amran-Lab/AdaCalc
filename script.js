@@ -149,11 +149,13 @@ function control_pressed(control) {
     break
 		case "=":
     console.log("=");
-    if (calculation.expression()==''){
-      screen.set.operand('')
+    var total = screen.get.operand();
+    
+    if ((calculation.expression()=='') || (trim_invalid_numerics(total) != total)){
+      screen.set.operand(total)
       return
     }
-    var total = screen.get.operand();
+    
      
     var oper = ['+','-','/','*']
     if ((oper.includes(calculation.last())) && (total == '')){

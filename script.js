@@ -150,6 +150,9 @@ function control_pressed(control) {
 		case "=":
     console.log("=");
     var total = screen.get.operand();
+    if (AnsFlag == true){
+      return
+    }
     //checks for invalid characters
     if ((calculation.expression()=='') || (trim_invalid_numerics(total) != total)){
       screen.set.operand(total)
@@ -285,14 +288,19 @@ function evaluate(expression) {
   console.log('expression')
   console.log(expression);
   var arr = []
-  
-  var answer = eval(expression).toFixed(11);
-  answer = trailing_zero(answer);
-  
-  console.log('answer');
-  console.log(answer);
-  answer = parseFloat(answer);  
-  return answer;
+  try {
+    var answer = eval(expression).toFixed(11);
+    answer = trailing_zero(answer);
+    
+    console.log('answer');
+    console.log(answer);
+    answer = parseFloat(answer);  
+    return answer;
+  }
+  catch(err) {
+    return "ERROR"
+  }
+
 
 }
 

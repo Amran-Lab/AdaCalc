@@ -186,7 +186,7 @@ function control_pressed(control) {
 function digit_pressed(digit) {
 	console.log("digit pressed: " + digit);
   if (AnsFlag == true){
-    screen.clear.operand()
+    screen.clear.all()
     calculation.clear()
     AnsFlag = false
 
@@ -348,6 +348,3 @@ window.onload = () => {
   
   
 };
-
-
-

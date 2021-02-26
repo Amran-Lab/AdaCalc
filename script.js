@@ -273,12 +273,12 @@ function evaluate(expression) {
     return ""
   }
 
-  
+  /*
   if (expression.replace((/[e+*\/]/g),"") != trim_invalid_numerics(expression)){
 
     return "ERROR"
   }
-
+  */
   // gets rid of leading zero
   // looks behind for a number or decimal and looks ahead for a number
   // if there are numbers behind it or a decimal it matches

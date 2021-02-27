@@ -77,24 +77,19 @@ function append_value(original, append, glue, spacer=false) {
     var space = " ";
   }
   if (original == ""){
-    console.log(append);
     return append;
 
   }
   else if (append == ""){
-    console.log(original);
     return original;
 
   }
   else if (glue == ""){
-    console.log(original + space + append);
     return original + space + append;
 
   }
   else {
-
-    console.log(original + glue + append);
-    return original + space + glue + space +append;
+    return original + space + glue + space + append;
   }
     
 }
@@ -103,11 +98,11 @@ function append_value(original, append, glue, spacer=false) {
 function valid_leadingzeros(value) {
 
   if ((value[0] == '0') && (value[1] == '0')){
-    console.log('false');
+
     return false;
   }
   else {
-    console.log('true');
+
     return true;
   }
 }
@@ -116,11 +111,10 @@ function valid_leadingzeros(value) {
 function valid_decimals(value) {
   var count = value.split('.').length - 1;  //splits the string into an array by .
   if (count > 1) {                  //number of . = number of elements in array -1
-    console.log('false');   //e.g '123.234' = ['123','234] 1 dot = 2 array elements
+                                //e.g '123.234' = ['123','234] 1 dot = 2 array elements
     return false;            // '24222342' = ['2422342'] 0 dot = 1 array elements
   }
   else {
-    console.log('true');
     return true;
   }
 }
@@ -203,7 +197,7 @@ function control_pressed(control) {
     // Lets Digit Pressed And Operator Pressed Know We Have Recentlt finished an equation
     // And there is an answer 
     AnsFlag = true
-    calculation.push(val)  
+    calculation.push(val)  // I want to push the value that is most accurate
     screen.set.operand(valPrecision)
 
     break
@@ -284,8 +278,7 @@ function trailing_zero(exp){
         var indexe = str.indexOf('e');
       }
       var indexe = str.indexOf('e');
-      console.log('eeeeeeeek')
-      console.log(indexe)
+
       if (str[indexe -1]=='.'){
         str = str.slice(0,indexe - 1) + str.slice(indexe,str.length)
     
@@ -326,6 +319,8 @@ function evaluate(expression) {
   // if there are numbers behind it or a decimal it matches
   // until it sees a number 00101.002100 return 101.002100 hopefully
   expression= expression.replace(/(?<![\.0-9])0+(?=[0-9])/g,'')
+  console.log('expression')
+  console.log(expression)
 
 
 

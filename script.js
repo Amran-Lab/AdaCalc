@@ -60,7 +60,13 @@ const calculation = {
   },
 
 	expression: function() {
-    return calculation._expression.join(' ');
+    //return calculation._expression.join(' '); //worked much easier
+    var joinedExpression = "";
+    var space = true;
+    for (var i = 0; i < calculation._expression.length; i++) {
+      joinedExpression =  append_value(joinedExpression,calculation._expression[i],"",space);
+    }
+    return joinedExpression;
   }
 };
 
@@ -228,15 +234,15 @@ function digit_pressed(digit) {
 
 function operator_pressed(operator) {
 	console.log("operator pressed: " + operator);
-  //checks if last expression was an operator
-  var total = screen.get.operand();
   
+  var total = screen.get.operand();
+  // checks if we are preceding from an =
   if (AnsFlag == true){
     AnsFlag = false
     total = ''
   }
   var oper = ['+','-','/','*']
-  
+  //checks if last expression was an operator
   if (oper.includes(calculation.last()) && total ==''){
     console.log("already pressed an operator")
     calculation.pop()
@@ -244,6 +250,7 @@ function operator_pressed(operator) {
   if (total!=''){
     calculation.push(total)
   }
+  // So we can't Start With +/* but can start with -
   if ((calculation.last()=='') && (operator !='-')){
     console.log('No Number Yet Pressed')
     return
@@ -257,8 +264,25 @@ function operator_pressed(operator) {
 //gets rid of 0s at end
 function trailing_zero(exp){
   var str = exp.toString()
-  
-  while (str[str.length -1] == '0'){
+  //checks if last digit is 0
+  while ((str[str.length -1] == '0' && str.includes('.')) || (str.includes('e'))){
+    // as is 5.0000000e+10 => 5.00000000e+1 BAD ERRoR Handle
+    if (str.includes('e')){
+      var indexe = str.indexOf('e');
+      while (str[indexe -1] == '0' && str.includes('.')){
+        str = str.slice(0,indexe - 1) + str.slice(indexe,str.length)
+        var indexe = str.indexOf('e');
+      }
+      var indexe = str.indexOf('e');
+      console.log('eeeeeeeek')
+      console.log(indexe)
+      if (str[indexe -1]=='.'){
+        str = str.slice(0,indexe - 1) + str.slice(indexe,str.length)
+    
+      }
+
+      break; // if this loop gets started we don't need the main
+    }
     str = str.slice(0,str.length - 1)
     
   }
@@ -283,8 +307,10 @@ function evaluate(expression) {
   if (expression.replace((/[e+*\/]/g),"") != trim_invalid_numerics(expression)){
 
     return "ERROR"
-  }
+  } Conflicted with e+ and NaN or Infinity maybe could've been accounted for
   */
+
+
   // gets rid of leading zero
   // looks behind for a number or decimal and looks ahead for a number
   // if there are numbers behind it or a decimal it matches
@@ -295,9 +321,18 @@ function evaluate(expression) {
 
   var arr = []
   try {
-    var answer = eval(expression).toFixed(11);
-    answer = trailing_zero(answer);
     
+    // .toFixed vs .toPrecision
+    // x.toFixed(8) x.toPrecision(8)---------
+    // x = 123456789.12345678123
+    // 123456789.12345678 vs 12345678
+    // x = 0.000012345678
+    // 0.00001234 vs 0.000012345678----------
+    // toFixed Has more accuracy with large numbers
+    // opposed to small with toPrecision**GOOGLE CALC seems to use 12 sf
+    var answer = eval(expression).toPrecision(12);
+    answer = trailing_zero(answer); // Gets Rid of 0
+    console.log(answer)
     answer = parseFloat(answer);  
     return answer;
   }

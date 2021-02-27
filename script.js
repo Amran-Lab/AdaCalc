@@ -197,7 +197,7 @@ function control_pressed(control) {
       return
     }
     val = parseFloat(val)
-    var valPrecision =  trailing_zero(val.toPrecision(8));  //gets first 8 digits and removes end 0's at start
+    var valPrecision =  trailing_zero(val.toPrecision(max_digits));  //gets first 8 digits and removes end 0's at start
 
     calculation.clear()
     // Lets Digit Pressed And Operator Pressed Know We Have Recentlt finished an equation

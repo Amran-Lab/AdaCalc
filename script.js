@@ -146,20 +146,26 @@ function control_pressed(control) {
 		case "c":
     screen.clear.operand()
     console.log("c");
+    if (AnsFlag == true){
+      //if coming from an '=' giving the all clear
+      screen.clear.all()
+      calculation.clear();
+      AnsFlag=false
+      return
+    }
     break
 		case "ac": 
-    screen.clear.operand();
-    screen.clear.expression();
+    screen.clear.all()
     calculation.clear();
     console.log("ac");
     break
 		case "=":
     console.log("=");
     var total = screen.get.operand();
-    if (AnsFlag == true){
+    if (AnsFlag == true){ //no changes made nothing to change
       return
     }
-    //checks for invalid characters
+    //checks for invalid characters and emty expression
     if ((calculation.expression()=='') || (trim_invalid_numerics(total) != total)){
       screen.set.operand(total)
       return
@@ -207,20 +213,20 @@ function control_pressed(control) {
 
 function digit_pressed(digit) {
 	console.log("digit pressed: " + digit);
-  if (AnsFlag == true){
-    screen.clear.all()
+  if (AnsFlag == true){ // check  if came from '='
+    screen.clear.all()  // if so giving the all clear
     calculation.clear()
-    AnsFlag = false
+    AnsFlag = false      // resetting flag
   }
   var total = screen.get.operand();
   var numt = total.replace('.','');
   
-  if (numt.length == max_digits){
+  if (numt.length == max_digits){    //don't let user go past max digits
     return
   }
   total = total + digit
   if ((valid_decimals(total)==false) && (digit == '.')){
-    return
+    return            // checks for multiple decimals
 
   }
   //checks for 0 at the beginning dpress 0 , 1 gives 1 dpress 0, ., 1, gives 0.1
@@ -236,9 +242,13 @@ function operator_pressed(operator) {
 	console.log("operator pressed: " + operator);
   
   var total = screen.get.operand();
-  // checks if we are preceding from an =
+  // checks if we are preceding from an '='
   if (AnsFlag == true){
-    AnsFlag = false
+    AnsFlag = false   //if we are we can follow from calc.last()
+    if (total=='ERROR'){
+      screen.clear.all()
+      return
+    }
     total = ''
   }
   var oper = ['+','-','/','*']

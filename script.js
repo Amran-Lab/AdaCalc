@@ -159,7 +159,7 @@ function control_pressed(control) {
     if (AnsFlag == true){ //no changes made nothing to change
       return
     }
-    //checks for invalid characters and emty expression
+    //checks for invalid characters and empty expression
     if ((calculation.expression()=='') || (trim_invalid_numerics(total) != total)){
       screen.set.operand(total)
       return
@@ -300,6 +300,7 @@ function trailing_zero(exp){
 
 function evaluate(expression) {
   console.log('computing')
+  expression = expression.toString()
   var expression = expression.replace(/\s/g, '');
   
   if (expression == ''){

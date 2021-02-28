@@ -168,13 +168,13 @@ function control_pressed(control) {
      
     var oper = ['+','-','/','*']
     if ((oper.includes(calculation.last())) && (total == '')){
-      console.log("already pressed an operator")
-      alert("already pressed an operator Enter A Number")
+      console.log("already pressed an operator Enter A Number")
+      //alert("already pressed an operator Enter A Number")
       return
     }
     if (total == '.'){
-      console.log("Pressed a Decimal")
-      alert("Pressed A Decimal Enter A Number")
+      console.log("Pressed a Decimal Enter A Number")
+      //alert("Pressed A Decimal Enter A Number")
       return
     }
     calculation.push(total)
